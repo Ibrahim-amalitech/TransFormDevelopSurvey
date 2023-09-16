@@ -1,0 +1,327 @@
+USE TrendStreamDB;
+
+-- Check if 'dev_survey_2020_to_2023' table exists, and if not, create it
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'dev_survey_2020_to_2023_utf8_encoded_primarykey')
+BEGIN
+    CREATE TABLE dev_survey_2020_to_2023_utf8_encoded_primarykey (
+        [EducationLevel] NVARCHAR(MAX),
+        [ObjectiveForCoding] NVARCHAR(MAX),
+        [JobDescription] NVARCHAR(MAX),
+        [EmploymentStatus] NVARCHAR(MAX),
+        [OrgSize] NVARCHAR(MAX),
+        [YearsCode] NVARCHAR(MAX),
+        [YearsCodePro] NVARCHAR(MAX),
+        [Age] NVARCHAR(MAX),
+        [LanguagesHaveWorkedWith] NVARCHAR(MAX),
+        [LanguagesWantToWorkWith] NVARCHAR(MAX),
+        [DatabasesHaveWorkedWith] NVARCHAR(MAX),
+        [DatabasesWantToWorkWith] NVARCHAR(MAX),
+        [PlatformsHaveWorkedWith] NVARCHAR(MAX),
+        [PlatformWantToWorkWith] NVARCHAR(MAX),
+        [WebFrameHaveWorkedWith] NVARCHAR(MAX),
+        [WebFrameWantToWorkWith] NVARCHAR(MAX),
+        [OtherTechHaveWorkedWith] NVARCHAR(MAX),
+        [OtherTechWantToWorkWith] NVARCHAR(MAX),
+        [NEWCollabToolsHaveWorkedWith] NVARCHAR(MAX),
+        [NEWCollabToolsWantToWorkWith] NVARCHAR(MAX),
+        [ToolsTechHaveWorkedWith] NVARCHAR(MAX),
+        [ToolsTechWantToWorkWith] NVARCHAR(MAX),
+        [Country] NVARCHAR(MAX),
+        [StateORProvince] NVARCHAR(MAX),
+        [OsForProfessionalUse] NVARCHAR(MAX),
+        [Currency] NVARCHAR(MAX),
+        [AnnualCompensation] NVARCHAR(MAX),
+        [Sexuality] NVARCHAR(MAX),
+        [Ethnicity] NVARCHAR(MAX),
+        [CodingCertificatesPlatforms] NVARCHAR(MAX),
+        [LearnCodeHow] NVARCHAR(MAX),
+        [LearnCodeOnlineWhere] NVARCHAR(MAX),
+        [CodingActivities] NVARCHAR(MAX),
+        [RemoteWork] NVARCHAR(MAX),
+        [IndustryType] NVARCHAR(MAX),
+        [CollabWorkManagementToolsHaveWorkedWith] NVARCHAR(MAX),
+        [CollabWorkManagementToolsWantToWorkWith] NVARCHAR(MAX),
+        [CommunicationToolsHaveWorkedWith] NVARCHAR(MAX),
+        [CommunicationToolsWantToWorkWith] NVARCHAR(MAX),
+        [AISearchHaveWorkedWith] NVARCHAR(MAX),
+        [AISearchWantToWorkWith] NVARCHAR(MAX),
+        [AIDevHaveWorkedWith] NVARCHAR(MAX),
+        [AIDevWantToWorkWith] NVARCHAR(MAX),
+        [AITrust] NVARCHAR(MAX),
+        [AIBenefits] NVARCHAR(MAX),
+        [DoYouCurrentlyUseAITools] NVARCHAR(MAX),
+        [AIToolCurrentlyUsing] NVARCHAR(MAX),
+        [TaskNotInterestedInUsingAIFor] NVARCHAR(MAX),
+        [OsForPersonalUse] NVARCHAR(MAX),
+        [UnderGradMajor] NVARCHAR(MAX),
+        [VersionControlUsage] NVARCHAR(MAX),
+        [Year] NVARCHAR(MAX),
+        [OfficeStack] NVARCHAR(MAX)
+    );
+END;
+
+-- Create a global temporary table to store the merged data
+CREATE TABLE ##MergedData (
+    [EducationLevel] NVARCHAR(MAX),
+    [ObjectiveForCoding] NVARCHAR(MAX),
+    [JobDescription] NVARCHAR(MAX),
+    [EmploymentStatus] NVARCHAR(MAX),
+    [OrgSize] NVARCHAR(MAX),
+    [YearsCode] NVARCHAR(MAX),
+    [YearsCodePro] NVARCHAR(MAX),
+    [Age] NVARCHAR(MAX),
+    [LanguagesHaveWorkedWith] NVARCHAR(MAX),
+    [LanguagesWantToWorkWith] NVARCHAR(MAX),
+    [DatabasesHaveWorkedWith] NVARCHAR(MAX),
+    [DatabasesWantToWorkWith] NVARCHAR(MAX),
+    [PlatformsHaveWorkedWith] NVARCHAR(MAX),
+    [PlatformWantToWorkWith] NVARCHAR(MAX),
+    [WebFrameHaveWorkedWith] NVARCHAR(MAX),
+    [WebFrameWantToWorkWith] NVARCHAR(MAX),
+    [OtherTechHaveWorkedWith] NVARCHAR(MAX),
+    [OtherTechWantToWorkWith] NVARCHAR(MAX),
+    [NEWCollabToolsHaveWorkedWith] NVARCHAR(MAX),
+    [NEWCollabToolsWantToWorkWith] NVARCHAR(MAX),
+    [ToolsTechHaveWorkedWith] NVARCHAR(MAX),
+    [ToolsTechWantToWorkWith] NVARCHAR(MAX),
+    [Country] NVARCHAR(MAX),
+    [StateORProvince] NVARCHAR(MAX),
+    [OsForProfessionalUse] NVARCHAR(MAX),
+    [Currency] NVARCHAR(MAX),
+    [AnnualCompensation] NVARCHAR(MAX),
+    [Sexuality] NVARCHAR(MAX),
+    [Ethnicity] NVARCHAR(MAX),
+    [CodingCertificatesPlatforms] NVARCHAR(MAX),
+    [LearnCodeHow] NVARCHAR(MAX),
+    [LearnCodeOnlineWhere] NVARCHAR(MAX),
+    [CodingActivities] NVARCHAR(MAX),
+    [RemoteWork] NVARCHAR(MAX),
+    [IndustryType] NVARCHAR(MAX),
+    [CollabWorkManagementToolsHaveWorkedWith] NVARCHAR(MAX),
+    [CollabWorkManagementToolsWantToWorkWith] NVARCHAR(MAX),
+    [CommunicationToolsHaveWorkedWith] NVARCHAR(MAX),
+    [CommunicationToolsWantToWorkWith] NVARCHAR(MAX),
+    [AISearchHaveWorkedWith] NVARCHAR(MAX),
+    [AISearchWantToWorkWith] NVARCHAR(MAX),
+    [AIDevHaveWorkedWith] NVARCHAR(MAX),
+    [AIDevWantToWorkWith] NVARCHAR(MAX),
+    [AITrust] NVARCHAR(MAX),
+    [AIBenefits] NVARCHAR(MAX),
+    [DoYouCurrentlyUseAITools] NVARCHAR(MAX),
+    [AIToolCurrentlyUsing] NVARCHAR(MAX),
+    [TaskNotInterestedInUsingAIFor] NVARCHAR(MAX),
+    [OsForPersonalUse] NVARCHAR(MAX),
+    [UnderGradMajor] NVARCHAR(MAX),
+    [VersionControlUsage] NVARCHAR(MAX),
+    [Year] NVARCHAR(MAX),
+    [OfficeStack] NVARCHAR(MAX)
+);
+
+
+
+-- Dynamic SQL to insert data into the temporary table from tables ending with '_processed'
+DECLARE @SQL NVARCHAR(MAX) = '';
+
+SELECT @SQL = @SQL + 'INSERT INTO ##MergedData 
+							SELECT  
+									[EducationLevel] AS EducationLevel,
+									[ObjectiveForCoding] AS ObjectiveForCoding,
+									[JobDescription] AS JobDescription,
+									[EmploymentStatus] AS EmploymentStatus,
+									[OrgSize] AS OrgSize,
+									[YearsCode] AS YearsCode,
+									[YearsCodePro] AS YearsCodePro,
+									[Age] AS Age,
+									[LanguagesHaveWorkedWith] AS LanguagesHaveWorkedWith,
+									[LanguagesWantToWorkWith] AS LanguagesWantToWorkWith,
+									[DatabasesHaveWorkedWith] AS DatabasesHaveWorkedWith,
+									[DatabasesWantToWorkWith] AS DatabasesWantToWorkWith,
+									[PlatformsHaveWorkedWith] AS PlatformsHaveWorkedWith,
+									[PlatformWantToWorkWith] AS PlatformWantToWorkWith,
+									[WebFrameHaveWorkedWith] AS WebFrameHaveWorkedWith,
+									[WebFrameWantToWorkWith] AS WebFrameWantToWorkWith,
+									[OtherTechHaveWorkedWith] AS OtherTechHaveWorkedWith,
+									[OtherTechWantToWorkWith] AS OtherTechWantToWorkWith,
+									[NEWCollabToolsHaveWorkedWith] AS NEWCollabToolsHaveWorkedWith,
+									[NEWCollabToolsWantToWorkWith] AS NEWCollabToolsWantToWorkWith,
+									[ToolsTechHaveWorkedWith] AS ToolsTechHaveWorkedWith,
+									[ToolsTechWantToWorkWith] AS ToolsTechWantToWorkWith,
+									[Country] AS Country,
+									[StateORProvince] AS StateORProvince,
+									[OsForProfessionalUse] AS OsForProfessionalUse,
+									[Currency] AS Currency,
+									[AnnualCompensation] AS AnnualCompensation,
+									[Sexuality] AS Sexuality,
+									[Ethnicity] AS Ethnicity,
+									[CodingCertificatesPlatforms] AS CodingCertificatesPlatforms,
+									[LearnCodeHow] AS LearnCodeHow,
+									[LearnCodeOnlineWhere] AS LearnCodeOnlineWhere,
+									[CodingActivities] AS CodingActivities,
+									[RemoteWork] AS RemoteWork,
+									[IndustryType] AS IndustryType,
+									[CollabWorkManagementToolsHaveWorkedWith] AS CollabWorkManagementToolsHaveWorkedWith,
+									[CollabWorkManagementToolsWantToWorkWith] AS CollabWorkManagementToolsWantToWorkWith,
+									[CommunicationToolsHaveWorkedWith] AS CommunicationToolsHaveWorkedWith,
+									[CommunicationToolsWantToWorkWith] AS CommunicationToolsWantToWorkWith,
+									[AISearchHaveWorkedWith] AS AISearchHaveWorkedWith,
+									[AISearchWantToWorkWith] AS AISearchWantToWorkWith,
+									[AIDevHaveWorkedWith] AS AIDevHaveWorkedWith,
+									[AIDevWantToWorkWith] AS AIDevWantToWorkWith,
+									[AITrust] AS AITrust,
+									[AIBenefits] AS AIBenefits,
+									[DoYouCurrentlyUseAITools] AS DoYouCurrentlyUseAITools,
+									[AIToolCurrentlyUsing] AS AIToolCurrentlyUsing,
+									[TaskNotInterestedInUsingAIFor] AS TaskNotInterestedInUsingAIFor,
+									[OsForPersonalUse] AS OsForPersonalUse,
+									[UnderGradMajor] AS UnderGradMajor,
+									[VersionControlUsage] AS VersionControlUsage,
+									[Year] AS Year,
+									[OfficeStack] AS OfficeStack
+
+
+FROM ' + QUOTENAME(name) + ';' + CHAR(13)
+FROM sys.tables
+WHERE name LIKE '%[_]processed';
+
+-- Execute the dynamic SQL to populate the temporary table
+EXEC sp_executesql @SQL;
+
+-- Add a new column as primary key
+ALTER TABLE ##MergedData
+ADD NewPrimaryKey INT IDENTITY(1,1) PRIMARY KEY;
+
+-- Add a new column as primary key to the target table if it doesn't exist
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'NewPrimaryKey' AND Object_ID = Object_ID(N'dev_survey_2020_to_2023_utf8_encoded_primarykey'))
+BEGIN
+    ALTER TABLE dev_survey_2020_to_2023_utf8_encoded_primarykey
+    ADD NewPrimaryKey INT IDENTITY(1, 1) PRIMARY KEY;
+END;
+
+-- Enable IDENTITY_INSERT for the target table
+SET IDENTITY_INSERT dev_survey_2020_to_2023_utf8_encoded_primarykey ON;
+
+-- Insert the data from the temporary table into the final table
+INSERT INTO dev_survey_2020_to_2023_utf8_encoded_primarykey (
+    [EducationLevel],
+    [ObjectiveForCoding],
+    [JobDescription],
+    [EmploymentStatus],
+	[OrgSize],
+    [YearsCode],
+    [YearsCodePro],
+    [Age] ,
+    [LanguagesHaveWorkedWith] ,
+    [LanguagesWantToWorkWith],
+    [DatabasesHaveWorkedWith],
+    [DatabasesWantToWorkWith],
+    [PlatformsHaveWorkedWith],
+    [PlatformWantToWorkWith],
+    [WebFrameHaveWorkedWith],
+    [WebFrameWantToWorkWith],
+    [OtherTechHaveWorkedWith],
+    [OtherTechWantToWorkWith],
+    [NEWCollabToolsHaveWorkedWith],
+    [NEWCollabToolsWantToWorkWith],
+    [ToolsTechHaveWorkedWith],
+    [ToolsTechWantToWorkWith],
+    [Country] ,
+    [StateORProvince] ,
+    [OsForProfessionalUse] ,
+    [Currency] ,
+    [AnnualCompensation],
+    [Sexuality],
+    [Ethnicity],
+    [CodingCertificatesPlatforms] ,
+    [LearnCodeHow],
+    [LearnCodeOnlineWhere] ,
+    [CodingActivities] ,
+    [RemoteWork] ,
+    [IndustryType] ,
+    [CollabWorkManagementToolsHaveWorkedWith] ,
+    [CollabWorkManagementToolsWantToWorkWith],
+    [CommunicationToolsHaveWorkedWith],
+    [CommunicationToolsWantToWorkWith] ,
+    [AISearchHaveWorkedWith],
+    [AISearchWantToWorkWith] ,
+    [AIDevHaveWorkedWith] ,
+    [AIDevWantToWorkWith] ,
+    [AITrust] ,
+    [AIBenefits],
+    [DoYouCurrentlyUseAITools],
+    [AIToolCurrentlyUsing],
+    [TaskNotInterestedInUsingAIFor],
+    [OsForPersonalUse] ,
+    [UnderGradMajor] ,
+    [VersionControlUsage],
+    [Year],
+    [OfficeStack],
+    -- Add other columns here,
+    [NewPrimaryKey] -- Include the new primary key column
+)
+SELECT
+    [EducationLevel],
+    [ObjectiveForCoding],
+    [JobDescription],
+    [EmploymentStatus],
+    [OrgSize],
+    [YearsCode],
+    [YearsCodePro],
+    [Age] ,
+    [LanguagesHaveWorkedWith] ,
+    [LanguagesWantToWorkWith],
+    [DatabasesHaveWorkedWith],
+    [DatabasesWantToWorkWith],
+    [PlatformsHaveWorkedWith],
+    [PlatformWantToWorkWith],
+    [WebFrameHaveWorkedWith],
+    [WebFrameWantToWorkWith],
+    [OtherTechHaveWorkedWith],
+    [OtherTechWantToWorkWith],
+    [NEWCollabToolsHaveWorkedWith],
+    [NEWCollabToolsWantToWorkWith],
+    [ToolsTechHaveWorkedWith],
+    [ToolsTechWantToWorkWith],
+    [Country] ,
+    [StateORProvince] ,
+    [OsForProfessionalUse] ,
+    [Currency] ,
+    [AnnualCompensation],
+    [Sexuality],
+    [Ethnicity],
+    [CodingCertificatesPlatforms] ,
+    [LearnCodeHow],
+    [LearnCodeOnlineWhere] ,
+    [CodingActivities] ,
+    [RemoteWork] ,
+    [IndustryType] ,
+    [CollabWorkManagementToolsHaveWorkedWith] ,
+    [CollabWorkManagementToolsWantToWorkWith],
+    [CommunicationToolsHaveWorkedWith],
+    [CommunicationToolsWantToWorkWith] ,
+    [AISearchHaveWorkedWith],
+    [AISearchWantToWorkWith] ,
+    [AIDevHaveWorkedWith] ,
+    [AIDevWantToWorkWith] ,
+    [AITrust] ,
+    [AIBenefits],
+    [DoYouCurrentlyUseAITools],
+    [AIToolCurrentlyUsing],
+    [TaskNotInterestedInUsingAIFor],
+    [OsForPersonalUse] ,
+    [UnderGradMajor] ,
+    [VersionControlUsage],
+    [Year],
+    [OfficeStack],
+    [NewPrimaryKey] -- Include the new primary key column
+FROM ##MergedData;
+
+-- Disable IDENTITY_INSERT after the insert
+SET IDENTITY_INSERT dev_survey_2020_to_2023_utf8_encoded_primarykey OFF;
+
+---- Insert the data from the temporary table into the final table
+--INSERT INTO dev_survey_2020_to_2023_utf8_encoded_primarykey
+--SELECT *
+--FROM ##MergedData;
+
+-- Drop the temporary table
+DROP TABLE ##MergedData;
